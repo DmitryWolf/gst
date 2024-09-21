@@ -47,6 +47,6 @@ namespace TCP{
         boost::asio::write(socket, boost::asio::buffer(&message_length, sizeof(message_length)));
         boost::asio::write(socket, boost::asio::buffer(message));
         
-        std::cout << "Данные отправлены серверу:\n" << message << std::endl;
+        std::cout << "Данные отправлены:\n" << message << std::endl;
     }
 }
