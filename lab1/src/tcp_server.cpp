@@ -19,8 +19,7 @@ std::vector<int> generate_vector(size_t K) {
 // Обработчик клиента
 void handle_client(tcp::socket socket, size_t N, size_t K) {
     try {
-        // Время начала работы
-        auto start = std::chrono::high_resolution_clock::now();
+        auto start_time = std::chrono::high_resolution_clock::now();
         
         // Генерация N векторов по K элементов
         {
@@ -32,20 +31,17 @@ void handle_client(tcp::socket socket, size_t N, size_t K) {
                 }
                 message += "\n";
             }
-
-            // Отправка данных клиенту
             TCP::send_data(socket, message);
         }
         
-        // Ожидание результата от клиента
         std::string result = TCP::receive_data(socket);
         
         // Время конца работы
-        auto end = std::chrono::high_resolution_clock::now();
+        auto end_time = std::chrono::high_resolution_clock::now();
 
         // Сохранение результата в файл
         {
-            std::chrono::duration<double> duration = end - start;
+            std::chrono::duration<double> duration = end_time - start_time;
 
             // std::ofstream output_file("results.txt", std::ios::app); // Открытие файла в режиме добавления
             std::ofstream output_file("results.txt", std::ios::trunc); // Открытие файла в режиме перезаписи
@@ -67,20 +63,17 @@ int main() {
     try {
         boost::asio::io_context io_context;
 
-        // Сервер прослушивает на порту 8080
         tcp::acceptor acceptor(io_context, tcp::endpoint(tcp::v4(), 8080));
 
         size_t N = 10;  // Количество векторов
         size_t K = 5;  // Количество элементов в каждом векторе
 
-        std::cout << "Сервер запущен и слушает на порту 8080..." << std::endl;
+        std::cout << "Сервер запущен и слушает на порту 8080" << std::endl;
 
         while (true) {
-            // Ожидание подключений
             tcp::socket socket(io_context);
             acceptor.accept(socket);
 
-            // Обработка клиента в отдельном потоке
             std::thread(handle_client, std::move(socket), N, K).detach();
         }
 

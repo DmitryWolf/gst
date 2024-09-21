@@ -2,7 +2,7 @@
 
 using boost::asio::ip::tcp;
 
-// Функция для вычисления префиксной суммы для одного вектора
+// префсумма вектора
 std::vector<int> prefix_sum(const std::vector<int>& vec) {
     std::vector<int> result(vec.size());
     result[0] = vec[0];
@@ -12,7 +12,7 @@ std::vector<int> prefix_sum(const std::vector<int>& vec) {
     return result;
 }
 
-// Функция для разбора строки в несколько векторов
+// Парсер строки в вектор векторов
 std::vector<std::vector<int>> parse_vectors(const std::string& data) {
     std::istringstream iss(data);
     size_t n = 0;
