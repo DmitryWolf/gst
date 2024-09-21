@@ -15,7 +15,7 @@ namespace TCP{
         try {
             boost::system::error_code error;
 
-            // Чтение длины сообщения (4 байта)
+            // Чтение size
             uint32_t message_length = 0;
             boost::asio::read(socket, boost::asio::buffer(&message_length, sizeof(message_length)), error);
 
@@ -23,7 +23,7 @@ namespace TCP{
                 throw boost::system::system_error(error);
             }
 
-            // Чтение данных на основе длины
+            // Чтение std::string
             std::vector<char> data(message_length);
             boost::asio::read(socket, boost::asio::buffer(data), error);
 
@@ -32,7 +32,6 @@ namespace TCP{
             }
 
             std::string retData = std::string(data.begin(), data.end());
-            // Вывод данных
             std::cout << "Полученные данные:\n" << retData << std::endl;
 
             return retData;
@@ -42,6 +41,7 @@ namespace TCP{
         return "";
     }
 
+    // Отправка данных в две фазы: size и std::string размера size
     void send_data(tcp::socket& socket, const std::string& message) {
         uint32_t message_length = message.size();
         boost::asio::write(socket, boost::asio::buffer(&message_length, sizeof(message_length)));
